@@ -32,4 +32,9 @@ public class Cliente implements Serializable {
         this.pontuacao = dados.pontuacao();
         this.avaliacao = dados.avaliacao();
     }
+    public void update(ClienteDataResumo dados) {
+        this.nome = dados.nome();
+        this.pontuacao = dados.pontuacao();
+        this.avaliacao = dados.avaliacao();
+    }
 }
