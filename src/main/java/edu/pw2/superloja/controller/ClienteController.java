@@ -17,6 +17,7 @@ import edu.pw2.superloja.model.cliente.Cliente;
 import edu.pw2.superloja.model.cliente.ClienteData;
 import edu.pw2.superloja.model.cliente.ClienteDataResumo;
 import edu.pw2.superloja.model.cliente.ClienteRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -32,12 +33,13 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ClienteData getCliente(@PathVariable Long id){
-        if(id != null){
+    public ClienteData getCliente(@PathVariable Long id, HttpServletResponse res){
+        if(id != null && clienteRepo.existsById(id)){
             Cliente c = clienteRepo.getReferenceById(id);
             ClienteData cd = new ClienteData(c);
             return cd;
         }
+        res.setStatus(204);
         return null;
     }
 
