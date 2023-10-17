@@ -1,5 +1,7 @@
 package edu.pw2.superloja.model.cliente;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,11 +20,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Cliente {
+public class Cliente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private Integer pontuacao;
     private Double avaliacao;
+    public Cliente(ClienteData dados) {
+        this.nome = dados.nome();
+        this.pontuacao = dados.pontuacao();
+        this.avaliacao = dados.avaliacao();
+    }
 }
