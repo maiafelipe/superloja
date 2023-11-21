@@ -10,11 +10,19 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(of = "id")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UsuarioRole role;
+
+    public Usuario(String username, String password, UsuarioRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 }
