@@ -1,6 +1,7 @@
 package edu.pw2.superloja.controller;
 
 import edu.pw2.superloja.model.usuario.*;
+import edu.pw2.superloja.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -24,13 +25,17 @@ public class AuthController {
     private UsuarioRepository usuarioRepo;
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UsuarioAuthDTO data){
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(data.username(), data.password());
-        Authentication auth = authManager.authenticate(token);
+        UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+        Authentication auth = authManager.authenticate(upat);
 
-        return ResponseEntity.ok().build();
+        String token = tokenService.generateToken((UsuarioDetails) auth.getPrincipal());
+
+        return ResponseEntity.ok(new UsuarioLoginResponseDTO(token));
     }
 
     @PostMapping("/register")

@@ -1,6 +1,8 @@
 package edu.pw2.superloja.config;
 
+import edu.pw2.superloja.config.component.SecurityFilter;
 import edu.pw2.superloja.service.AuthorizationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +22,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    SecurityFilter securityFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -28,9 +33,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/clientes").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                );
+                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class )
+        ;
         return http.build();
     }
 
